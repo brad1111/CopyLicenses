@@ -1,0 +1,27 @@
+{
+  "name": "copylicenses",
+  "version": "1.0.0",
+  "description": "Simple JS library to copy license.md files found using https://github.com/davglass/license-checker into a more useful place.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebradad1111/CopyLicenses.git"
+  },
+  "keywords": [
+    "license-checker",
+    "license",
+    "checker",
+    "licenses",
+    "copy",
+    "oss"
+  ],
+  "author": "Bradley Eaton",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thebradad1111/CopyLicenses/issues"
+  },
+  "homepage": "https://github.com/thebradad1111/CopyLicenses#readme"
+}
