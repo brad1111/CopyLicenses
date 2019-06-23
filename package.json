@@ -26,5 +26,8 @@
   },
   "homepage": "https://github.com/thebradad1111/CopyLicenses#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "bin": {
+    "copylicenses": "./index"
+  }
 }
