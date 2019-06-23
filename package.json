@@ -4,6 +4,7 @@
   "description": "Simple JS library to copy license.md files found using https://github.com/davglass/license-checker into a more useful place.",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,5 +24,7 @@
   "bugs": {
     "url": "https://github.com/thebradad1111/CopyLicenses/issues"
   },
-  "homepage": "https://github.com/thebradad1111/CopyLicenses#readme"
+  "homepage": "https://github.com/thebradad1111/CopyLicenses#readme",
+  "dependencies": {},
+  "devDependencies": {}
 }
