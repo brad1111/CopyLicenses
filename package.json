@@ -28,6 +28,6 @@
   "dependencies": {},
   "devDependencies": {},
   "bin": {
-    "copylicenses": "./index"
+    "copylicenses": "./index.js"
   }
 }
