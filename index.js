@@ -6,6 +6,7 @@ var path = require('path');
 
 //get arguments
 args = [];
+verbose = false;
 process.argv.forEach((val, index) => {
     if(index > 1){
         //Don't include first two since it isn't what we want
@@ -20,12 +21,12 @@ if(args.length === 0){
 
 function helptext(){
     console.log("CopyLicenses help" + os.EOL +
-                    "Required Arguments: [./path/to/node/licenses.json] [./path/to/destination] [/web/prefix/to/destination]" + os.EOL +
+                    "Usage: copylicenses [./path/to/node/licenses.json] [./path/to/destination] [/web/prefix/to/destination] <options>" + os.EOL +
                     "Options:" + os.EOL +
-                    "--help Shows this page");
+                    "--help Shows this page" + os.EOL +
+                    "--verbose Makes sure to log everything");
 }
 
-console.log(args[0].toLowerCase());
 //Give help text
 switch (args[0].toLowerCase()) {
     case "--help":
@@ -44,7 +45,11 @@ switch (args[0].toLowerCase()) {
         break;
 }
 
-if(args.length == 3){
+if(args.includes("--verbose")){
+    verbose = true;
+}
+
+if(args.length >= 3){
     //Correct length of arguemnts
     fs.readFile(args[0], 'utf8', (err, data) => {
         if(err){
@@ -61,7 +66,9 @@ if(args.length == 3){
                     fs.mkdirSync(destination, {recursive: true});
                     fs.copyFileSync(src, `${destination}/${path.basename(src)}`);
                     var absDestination = path.resolve(destination);
-                    console.log(`${src} was copied to ${absDestination}`);
+                    if(verbose){
+                        console.log(`${src} was copied to ${absDestination}`);
+                    }
 
                     // get the relative location from the containing folder to the actual location
                     var packageFullName = path.relative(args[1], destination);
@@ -74,7 +81,9 @@ if(args.length == 3){
                     }
                     var relativeFromWeb = args[2] + packageFullName + "/" + path.basename(src);
                     jsonObject[key].licenseFile = relativeFromWeb;
-                    console.log(`Relative web link: ${relativeFromWeb}`)
+                    if(verbose){
+                        console.log(`Relative web link: ${relativeFromWeb}`)
+                    }
                 }
             });
             //Write back to the file
