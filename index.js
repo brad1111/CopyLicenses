@@ -18,7 +18,7 @@ if(args.length === 0){
 
 function helptext(){
     console.log("CopyLicenses help" + os.EOL +
-                    "Required Arguments: [./path/to/node/licenses.json] [./path/to/destination]" + os.EOL +
+                    "Required Arguments: [./path/to/node/licenses.json] [./path/to/destination] [/web/prefix/to/destination]" + os.EOL +
                     "Options:" + os.EOL +
                     "--help Shows this page");
 }
@@ -42,36 +42,45 @@ switch (args[0].toLowerCase()) {
         break;
 }
 
-if(args.length == 2){
+if(args.length == 3){
     //Correct length of arguemnts
     fs.readFile(args[0], 'utf8', (err, data) => {
         if(err){
             console.error(err);
         }
         else{
-            var filesToCopy = [];
-            var objectNames = [];
             //We've got the data therefore now convert it to json objects
             var jsonObject = JSON.parse(data);
             Object.keys(jsonObject).forEach((key) => {
                 if(jsonObject[key].licenseFile){
-                    filesToCopy.push(jsonObject[key].licenseFile);
-                    objectNames.push(key);
+                    //Make the destination directory for the file to be copied to
+                    var src = jsonObject[key].licenseFile;
+                    var destination = `${args[1]}/${key}/`;
+                    fs.mkdirSync(destination, {recursive: true});
+                    fs.copyFileSync(src, `${destination}/${path.basename(src)}`);
+                    var absDestination = path.resolve(destination);
+                    console.log(`${src} was copied to ${absDestination}`);
+
+                    // get the relative location from the containing folder to the actual location
+                    var packageFullName = path.relative(args[1], destination);
+                    //Replace all backslashes with forward splashes
+                    if(packageFullName.includes("\\")){
+                        packageFullName = packageFullName.replace("\\","/");
+                    }
+                    if(packageFullName.includes("@")){
+                        
+                    }
+                    var relativeFromWeb = args[2] + packageFullName + "/" + path.basename(src);
+                    jsonObject[key].licenseFile = relativeFromWeb;
+                    console.log(`Relative web link: ${relativeFromWeb}`)
                 }
             });
-            filesToCopy.forEach((src,index) => {
-
-                //Make the directory for the destination
-                var destination = `${args[1]}/${objectNames[index]}/`;
-                fs.mkdir(destination, { recursive: true}, (err) => {
-                    if(err)
-                        throw err;
-                    fs.copyFile(src, `${destination}/${path.basename(src)}`, (err) => {
-                        if(err)
-                            throw err;
-                        console.log(`${src} was copied to ${destination}`);
-                    });
-                });
+            //Write back to the file
+            var jsonString = JSON.stringify(jsonObject);
+            fs.writeFile(args[0], jsonString, (err) => {
+                if(err)
+                    throw err;
+                console.log(`${args[0]} updated successfully.`);
             });
         }
     });
