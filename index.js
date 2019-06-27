@@ -119,7 +119,11 @@ function checkForLicense(fullPathAndName){
         var listItems = fs.readdirSync(dirLocation);     
         listItems.forEach((listItem) => {
             if(listItem.includes("license")){
-                return path.resolve(dirLocation, listItem);
+                var newLocation = path.resolve(dirLocation, listItem);
+                if(verbose){
+                    console.log(`Changed license file from ${fullPathAndName} to ${newLocation}`);
+                }
+                return newLocation;
             }
         });
     } catch (error) {
