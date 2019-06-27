@@ -109,7 +109,7 @@ if(args.length >= 3){
 function checkForLicense(fullPathAndName){
     //Get the actual name of the file
     var fileName = path.basename(fullPathAndName);
-    if(fileName.includes("license")){
+    if(fileName.toLowerCase().includes("license")){
         return fullPathAndName;
     }
     //Otherwise check to see if there is a filenamed license in the folder
