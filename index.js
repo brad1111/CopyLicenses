@@ -62,6 +62,10 @@ if(args.length >= 3){
                 if(jsonObject[key].licenseFile){
                     //Make the destination directory for the file to be copied to
                     var src = jsonObject[key].licenseFile;
+
+                    //Check for file name license
+                    src = checkForLicense(src);
+
                     var destination = `${args[1]}/${key}/`;
                     fs.mkdirSync(destination, {recursive: true});
                     fs.copyFileSync(src, `${destination}/${path.basename(src)}`);
@@ -98,4 +102,29 @@ if(args.length >= 3){
 } else {
     console.error("Error: Incorrect amount of arguments")
     helptext();
+}
+
+//Returns original string if there is no license file to replace the already given file, otherwise gives the new file
+//Args types: (string (the fileName of the item to check the directory))
+function checkForLicense(fullPathAndName){
+    //Get the actual name of the file
+    var fileName = path.basename(fullPathAndName);
+    if(fileName.includes("license")){
+        return fullPathAndName;
+    }
+    //Otherwise check to see if there is a filenamed license in the folder
+    var dirLocation = path.dirname(fullPathAndName);
+    
+    try {
+        var listItems = fs.readdirSync(dirLocation);     
+        listItems.forEach((listItem) => {
+            if(listItem.includes("license")){
+                return path.resolve(dirLocation, listItem);
+            }
+        });
+    } catch (error) {
+        console.error(`Error reading ${dirLocation}; ${JSON.stringify(error)}`);
+    }
+    //Coulnd't find a license
+    return fullPathAndName;
 }
