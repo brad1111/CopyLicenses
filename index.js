@@ -116,9 +116,10 @@ function checkForLicense(fullPathAndName){
     var dirLocation = path.dirname(fullPathAndName);
     
     try {
-        var listItems = fs.readdirSync(dirLocation);     
+        var listItems = fs.readdirSync(dirLocation);
+        console.log(listItems);
         listItems.forEach((listItem) => {
-            if(listItem.includes("license")){
+            if(listItem.toLowerCase().includes("license")){
                 var newLocation = path.resolve(dirLocation, listItem);
                 if(verbose){
                     console.log(`Changed license file from ${fullPathAndName} to ${newLocation}`);
